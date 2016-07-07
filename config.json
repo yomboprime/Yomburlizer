@@ -1,0 +1,19 @@
+{
+
+    "apiKey": "",
+
+    "playlistId": "",
+
+    "thumbnail": "default",
+
+    "channelTitle": "Retroactivo Podcast",
+
+    "channelURL": "http://retroactivo.es/",
+
+    "channelDescription": "Donde recordamos los inicios",
+
+    "outputPath": "./rssFileOutput.xml",
+
+    "language": "es"
+
+}
