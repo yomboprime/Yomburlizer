@@ -29,7 +29,7 @@ console.log( "Retrieving playlist information..." );
 
 ypi.playlistInfo( config.apiKey , config.playlistId, function( playlistItems ) {
 
-	console.log( playlistItems );
+	//console.log( playlistItems );
 
 	console.log( "Playlist has " + playlistItems.length + " videos." );
 
@@ -190,12 +190,23 @@ function generateOutput( playlistItems ) {
 
 		console.log( "Generating output file..." );
 
-		var rssContent = "<?xml version=\"1.0\"?>\n";
-		rssContent += "<rss version=\"2.0\">\n";
+		var rssContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+		rssContent += "<rss version=\"2.0\" \n";
+		rssContent +=
+			"	xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n" +
+			"	xmlns:wfw=\"http://wellformedweb.org/CommentAPI/\"\n" +
+			"	xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n" +
+			"	xmlns:atom=\"http://www.w3.org/2005/Atom\"\n" +
+			"	xmlns:sy=\"http://purl.org/rss/1.0/modules/syndication/\"\n" +
+			"	xmlns:slash=\"http://purl.org/rss/1.0/modules/slash/\"\n" +
+			"	>\n\n";
+
+
 		rssContent += "<channel>\n";
 		var titleLine = "<title>" + config.channelTitle + "</title>\n";
 		var linkLine = "<link>" + config.channelURL + "</link>\n";
 		rssContent += titleLine;
+		rssContent += "<atom:link href=\"" + config.channelURL + "feed/\" rel=\"self\" type=\"application/rss+xml\" />\n";
 		rssContent += linkLine;
 		rssContent += "<description>" + config.channelDescription + "</description>\n";
 		rssContent += "<language>" + config.language + "</language>";
@@ -211,20 +222,23 @@ function generateOutput( playlistItems ) {
 			}
 
 			rssContent += "<item>\n";
-			rssContent += "    <title>" + item.title + "</title>\n";
-			rssContent += "    <link>" + item.resourceId.audioURL + "</link>\n";
-			rssContent += "    <description>" + item.description + "</description>\n";
+			rssContent += "<title><![CDATA[" + item.title + "]]></title>\n";
+			rssContent += "<link><![CDATA[" + item.resourceId.audioURL + "]]></link>\n";
+			rssContent += "<description><![CDATA[" + item.description + "]]></description>\n";
+			rssContent += "<guid isPermaLink=\"false\">" + config.channelURL + ( i + 1 ) + "</guid>\n";
+/*
 			rssContent += "    <image>\n";
 			rssContent += "        <url>" + item.thumbnails[ config.thumbnail ].url + "</url>\n";
 			rssContent += "        " + titleLine;
 			rssContent += "        " + linkLine;
 			rssContent += "    </image>\n";
+*/
 			rssContent += "</item>\n";
 
 			numItems++;
 		}
 
-		rssContent += "</channel>\n";
+		rssContent += "</channel>\n</rss>";
 
 		// write output file
 		fs.writeFileSync( config.outputPath, rssContent );
