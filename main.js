@@ -113,6 +113,10 @@ function obtainAudioURLs( playlistItems, onAllObtained ) {
 
 				if ( audioURL ) {
 
+					if ( audioURL.endsWith( "\n" ) ) {
+						audioURL = audioURL.substring( 0, audioURL.length - 1 );
+					}
+
 					playlistItems[ itemIndex ].resourceId.audioURL = audioURL;
 					
 				}
@@ -207,7 +211,6 @@ function generateOutput( playlistItems ) {
 			}
 
 			rssContent += "<item>\n";
-			rssContent += "    <fecha>" + item.publishedAt + "</fecha>\n";
 			rssContent += "    <title>" + item.title + "</title>\n";
 			rssContent += "    <link>" + item.resourceId.audioURL + "</link>\n";
 			rssContent += "    <description>" + item.description + "</description>\n";
